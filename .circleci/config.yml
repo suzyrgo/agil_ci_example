@@ -3,5 +3,18 @@ orbs:
   node: circleci/node@3.0.0
 workflows:
   node-tests:
-    jobs:
+      jobs:
       - node/test
+
+jobs:
+  build-and-deploy:
+    executor: node/default
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: Build
+          command: npm run build
+      - run:
+          name: Deploy Netlify
+          command: npx netlify deploy --prod --dir=build
