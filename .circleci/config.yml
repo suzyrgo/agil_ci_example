@@ -2,9 +2,16 @@ version: 2.1
 orbs:
   node: circleci/node@3.0.0
 workflows:
-  node-tests:
-      jobs:
+  test-and-deploy:
+    jobs:
       - node/test
+      - build-and-deploy:
+          requires:
+            - node/test  
+          filters:
+            branches:
+              only:
+               -main    
 
 jobs:
   build-and-deploy:
@@ -17,4 +24,5 @@ jobs:
           command: npm run build
       - run:
           name: Deploy Netlify
-          command: npx netlify deploy --prod --dir=build
+          command: npx netlify 
+deploy --prod --dir=build:          
